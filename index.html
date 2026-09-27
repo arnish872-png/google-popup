@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google SignIn</title>
+</head>
+
+<body>
+    <button onclick="googleLogin()">SignIn With Google</button>
+</body>
+<script src="https://www.gstatic.com/firebasejs/12.16.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.16.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.16.0/firebase-database-compat.js"></script>
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyDcZiY-J-CE5EutJBLEPCpnJAqkS3AjZLg",
+        authDomain: "login-995d5.firebaseapp.com",
+        projectId: "login-995d5",
+        storageBucket: "login-995d5.firebasestorage.app",
+        messagingSenderId: "98461145611",
+        appId: "1:98461145611:web:509302954441a9265a850e",
+        databaseURL: "https://login-995d5-default-rtdb.firebaseio.com", 
+        measurementId: "G-2928PQXTQR"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+</script>
+<script>
+    const googleLogin = () => {
+        var provider = new firebase.auth.GoogleAuthProvider();
+        provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+        firebase.auth()
+            .signInWithPopup(provider)
+            .then((snap) => {
+                var key = snap.user.uid
+                console.log(snap)
+                firebase.database().ref("user").child(key).set({
+                    key: key,
+                    email: snap.user.email,
+                    name: snap.user.displayName,
+                    photo: snap.user.photoURL
+
+
+                })
+
+            })
+    }
+</script>
+
+</html>
